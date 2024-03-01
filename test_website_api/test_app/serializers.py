@@ -1,15 +1,6 @@
-from rest_framework import serializers
+"""from rest_framework import serializers
 
-from .models import Test1, Test2
-
-
-class Test2Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = Test2
-        fields = ['test2']
-
-
-class Test1Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = Test1
-        fields = ['test1']
+class TestSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=200)
+    other = serializers.CharField(max_length=200)
+    created = serializers.DateTimeField()"""
