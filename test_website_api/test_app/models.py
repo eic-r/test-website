@@ -1,14 +1,5 @@
-"""from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class Test1(models.Model):
-    test1 = models.TextField()
-
-    def __str__(self):
-        return self.test1
-
-
-class Test2(models.Model):
-    test2 = models.TextField()
-
-    def __str__(self):
-        return self.test2"""
+class CustomUser(AbstractUser):
+    # Add your custom fields if needed
+    pass
