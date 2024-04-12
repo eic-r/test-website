@@ -1,0 +1,4 @@
+<h2>Login</h2>
+<input type="text" placeholder="Username" #username required>
+<input type="password" placeholder="Password" #password required>
+<button type="button" (click)="login(username.value, password.value);password.value=''">Login</button>

@@ -1,0 +1,5 @@
+<h2>Register</h2>
+<input type="text" placeholder="Username" #username required>
+<input type="email" placeholder="Email" #email required>
+<input type="password" placeholder="Password" #password required>
+<button type="button" (click)="register(username.value, email.value, password.value);password.value=''">Register</button>
