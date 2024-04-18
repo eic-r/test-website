@@ -25,7 +25,7 @@ urlpatterns = [
     path('auth/register/', views.register_view, name='register'),
     path('auth/logged_in/', views.logged_in_view, name='logged_in'),
     path('api/get/', views.get_tests),
-    path('api/put', views.put_test),
+    path('api/put', views.put_tests),
     path('api/delete', views.delete_test),
     path('admin/', admin.site.urls),
 ]

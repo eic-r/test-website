@@ -66,7 +66,7 @@ def get_tests(request):
 
 @login_required
 @api_view(['PUT'])
-def put_test(request):
+def put_tests(request):
     test_data = JSONParser().parse(request)
     collection.insert_one(test_data)
     return JsonResponse(json_util.dumps(test_data), safe=False)

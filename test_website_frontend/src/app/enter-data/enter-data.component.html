@@ -1,0 +1,193 @@
+<main class="main">
+    <div class="test-selection">
+      <label for="testTypeSelect">Choose a test type:</label>
+      <select
+        id="testTypeSelect"
+        [(ngModel)]="selectedTest"
+        name="testType"
+        (ngModelChange)="onSelectTest($event)"
+      >
+        <option value="" disabled selected>Select a test</option>
+        <option value="tensile">Tensile Test</option>
+        <option value="shear">Shear Test</option>
+        <option value="thermalConductivity">Thermal Conductivity Test</option>
+      </select>
+    </div>
+    <div *ngIf="selectedTest === 'tensile'" class="tensile-form container">
+      <!-- Add all your tensile test inputs here -->
+      <input
+        type="text"
+        [(ngModel)]="tensileData.sampleIdentification"
+        name="sampleIdentification"
+        placeholder="Sample Identification"
+      />
+      <input
+        type="text"
+        [(ngModel)]="tensileData.materialType"
+        name="materialType"
+        placeholder="Material Type"
+      />
+      <input
+        type="text"
+        [(ngModel)]="tensileData.testDate"
+        name="testDate"
+        placeholder="Test Date"
+      />
+      <input
+        type="text"
+        [(ngModel)]="tensileData.testTemperature"
+        name="testTemperature"
+        placeholder="Test Temperature"
+      />
+      <input
+        type="text"
+        [(ngModel)]="tensileData.gaugeLength"
+        name="gaugeLength"
+        placeholder="Gauge Length"
+      />
+      <input
+        type="text"
+        [(ngModel)]="tensileData.crossSectionalArea"
+        name="crossSectionalArea"
+        placeholder="Cross-Sectional Area"
+      />
+      <input
+        type="text"
+        [(ngModel)]="tensileData.ultimateTensileStrength"
+        name="ultimateTensileStrength"
+        placeholder="Ultimate Tensile Strength"
+      />
+      <input
+        type="text"
+        [(ngModel)]="tensileData.tensileModulus"
+        name="tensileModulus"
+        placeholder="Tensile Modulus"
+      />
+      <input
+        type="text"
+        [(ngModel)]="tensileData.elongationAtBreak"
+        name="elongationAtBreak"
+        placeholder="Elongation at Break"
+      />
+      <input
+        type="text"
+        [(ngModel)]="tensileData.poissonRatio"
+        name="poissonRatio"
+        placeholder="Poisson's Ratio"
+      />
+      <input
+        type="text"
+        [(ngModel)]="tensileData.failureMode"
+        name="failureMode"
+        placeholder="Failure Mode"
+      />
+      <!-- Add the rest of your tensile test inputs... -->
+    </div>
+    <div *ngIf="selectedTest === 'shear'" class="shear-form container">
+      <!-- Add all your shear test inputs here -->
+      <input
+        type="text"
+        [(ngModel)]="shearData.sampleIdentification"
+        name="sampleIdentification"
+        placeholder="Sample Identification"
+      />
+      <input
+        type="text"
+        [(ngModel)]="shearData.materialType"
+        name="materialType"
+        placeholder="Material Type"
+      />
+      <input
+        type="text"
+        [(ngModel)]="shearData.testDate"
+        name="testDate"
+        placeholder="Test Date"
+      />
+      <input
+        type="text"
+        [(ngModel)]="shearData.testTemperature"
+        name="testTemperature"
+        placeholder="Test Temperature"
+      />
+      <input
+        type="text"
+        [(ngModel)]="shearData.shearModulus"
+        name="shearModulus"
+        placeholder="Shear Modulus"
+      />
+      <input
+        type="text"
+        [(ngModel)]="shearData.ultimateShearStrength"
+        name="ultimateShearStrength"
+        placeholder="Ultimate Shear Strength"
+      />
+      <input
+        type="text"
+        [(ngModel)]="shearData.shearStrainAtFailure"
+        name="shearStrainAtFailure"
+        placeholder="Shear Strain at Failure"
+      />
+      <input
+        type="text"
+        [(ngModel)]="shearData.failureMode"
+        name="failureMode"
+        placeholder="Failure Mode"
+      />
+    </div>
+    <div
+      *ngIf="selectedTest === 'thermalConductivity'"
+      class="thermal-form container"
+    >
+      <!-- Add all your thermal conductivity test inputs here -->
+      <input
+        type="text"
+        [(ngModel)]="thermalData.sampleIdentification"
+        name="sampleIdentification"
+        placeholder="Sample Identification"
+      />
+      <input
+        type="text"
+        [(ngModel)]="thermalData.materialType"
+        name="materialType"
+        placeholder="Material Type"
+      />
+      <!-- Add the rest of your thermal test inputs... -->
+    </div>
+    <button (click)="submitData()">Submit</button>
+  
+    <div *ngIf="tensileEntries.length > 0" class="results-table">
+      <h2>Tensile Test Entries</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Sample Identification</th>
+            <th>Material Type</th>
+            <th>Test Date</th>
+            <th>Test Temperature</th>
+            <th>Gauge Length</th>
+            <th>Cross-Sectional Area</th>
+            <th>Ultimate Tensile Strength</th>
+            <th>Tensile Modulus</th>
+            <th>Elongation at Break</th>
+            <th>Poisson's Ratio</th>
+            <th>Failure Mode</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of tensileEntries">
+            <td>{{ entry.sampleIdentification }}</td>
+            <td>{{ entry.materialType }}</td>
+            <td>{{ entry.testDate }}</td>
+            <td>{{ entry.testTemperature }}</td>
+            <td>{{ entry.gaugeLength }}</td>
+            <td>{{ entry.crossSectionalArea }}</td>
+            <td>{{ entry.ultimateTensileStrength }}</td>
+            <td>{{ entry.tensileModulus }}</td>
+            <td>{{ entry.elongationAtBreak }}</td>
+            <td>{{ entry.poissonRatio }}</td>
+            <td>{{ entry.failureMode }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
