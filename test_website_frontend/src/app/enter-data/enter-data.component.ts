@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DatabaseService } from '../database.service';
 
 @Component({
   selector: 'app-enter-data',
@@ -41,6 +42,8 @@ export class EnterDataComponent {
   tensileEntries: any[] = [];
   shearEntries: any[] = [];
   thermalEntries: any[] = [];
+
+  constructor(private databaseService: DatabaseService) { }
 
   onSelectTest(testType: string) {
     this.selectedTest = testType;
@@ -96,4 +99,15 @@ export class EnterDataComponent {
   }
 
   // Methods to handle form submissions would go here
+  putTests() { // this should be able to confirm multiple tests. probably should add a max limit
+    this.databaseService.putTests(this.tensileEntries, this.shearEntries, this.thermalEntries, []).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.tensileEntries = [];
+        this.shearEntries = [];
+        this.thermalEntries = [];
+      },
+      error: (e) => console.error(e) // handle failure state
+    });
+  }
 }

@@ -16,7 +16,7 @@ export class LoginComponent {
         console.log(response);
         this.router.navigate(['/']);
       },
-      error: (e) => console.error(e)
+      error: (e) => console.error(e) // handle failure state
     });
   }
 }

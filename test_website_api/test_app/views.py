@@ -11,11 +11,12 @@ from django.views.decorators.csrf import csrf_exempt
 from bson import json_util
 from .serializers import UserSerializer
 
+import time
 import pymongo
 
 client = pymongo.MongoClient('mongodb://localhost:27017') #change this to correct database connection string
 dbname = client['test-website']
-collection = dbname['test']
+collection = dbname['test_materials']
 
 @api_view(['POST'])
 def login_view(request):
@@ -67,9 +68,35 @@ def get_tests(request):
 @login_required
 @api_view(['PUT'])
 def put_tests(request):
-    test_data = JSONParser().parse(request)
-    collection.insert_one(test_data)
-    return JsonResponse(json_util.dumps(test_data), safe=False)
+    metadata = {
+        'user': request.user.username,
+        'timestamp': time.time()
+    }
+    for test_type, test_list in request.data.items():
+        if test_type != "other":
+            for entry in test_list:
+                sampleIdentification = entry["sampleIdentification"]
+                materialType = entry["materialType"]
+                entry.pop("sampleIdentification")
+                entry.pop("materialType")
+                entry["metadata"] = metadata
+
+                print(collection.update_one(
+                    { '_id': sampleIdentification},
+                    { 
+                        '$set': {
+                            'materialType': materialType
+                        },
+                        '$push': {
+                            test_type: entry
+                        }
+                    },
+                    upsert=True
+                ))
+        else:
+            pass # handle other tests
+
+    return Response({'message': 'Entry successful'}, status=status.HTTP_200_OK)
 
 @login_required
 @api_view(['DELETE'])
