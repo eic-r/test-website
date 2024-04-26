@@ -8,9 +8,11 @@ import { DatabaseService } from '../database.service';
 })
 export class EnterDataComponent {
   selectedTest = '';
-  tensileData = {
+  materialData = {
     sampleIdentification: '',
     materialType: '',
+  };
+  tensileData = {
     testDate: '',
     testTemperature: '',
     gaugeLength: '',
@@ -23,8 +25,6 @@ export class EnterDataComponent {
     // Other properties for tensile test
   };
   shearData = {
-    sampleIdentification: '',
-    materialType: '',
     testDate: '',
     testTemperature: '',
     shearModulus: '',
@@ -34,8 +34,13 @@ export class EnterDataComponent {
     // Other properties for shear test
   };
   thermalData = {
-    sampleIdentification: '',
-    materialType: '',
+    testDate: '',
+    testTemperature: '',
+    thickness: '',
+    crossSectionalArea: '',
+    thermalConductivity: '',
+    temperatureGradient: '',
+    heatFlux: '',
     // Other properties for thermal test
   };
 
@@ -52,8 +57,6 @@ export class EnterDataComponent {
 
   resetFormData() {
     this.tensileData = {
-      sampleIdentification: '',
-      materialType: '',
       testDate: '',
       testTemperature: '',
       gaugeLength: '',
@@ -66,8 +69,6 @@ export class EnterDataComponent {
       // Reset other tensile test properties
     };
     this.shearData = {
-      sampleIdentification: '',
-      materialType: '',
       testDate: '',
       testTemperature: '',
       shearModulus: '',
@@ -77,8 +78,13 @@ export class EnterDataComponent {
       // Reset other shear test properties
     };
     this.thermalData = {
-      sampleIdentification: '',
-      materialType: '',
+      testDate: '',
+      testTemperature: '',
+      thickness: '',
+      crossSectionalArea: '',
+      thermalConductivity: '',
+      temperatureGradient: '',
+      heatFlux: '',
       // Reset other thermal test properties
     };
   }
@@ -86,20 +92,20 @@ export class EnterDataComponent {
   submitData() {
     switch (this.selectedTest) {
       case 'tensile':
-        this.tensileEntries.push({ ...this.tensileData });
+        this.tensileEntries.push({ ...this.combineAndClean(this.materialData, this.tensileData) });
         break;
       case 'shear':
-        this.shearEntries.push({ ...this.shearData });
+        this.shearEntries.push({ ...this.combineAndClean(this.materialData, this.shearData) });
         break;
       case 'thermalConductivity':
-        this.thermalEntries.push({ ...this.thermalData });
+        this.thermalEntries.push({ ...this.combineAndClean(this.materialData, this.thermalData) });
         break;
     }
     this.resetFormData();
   }
 
   // Methods to handle form submissions would go here
-  putTests() { // this should be able to confirm multiple tests. probably should add a max limit
+  putTests() {
     this.databaseService.putTests(this.tensileEntries, this.shearEntries, this.thermalEntries, []).subscribe({
       next: (response) => {
         console.log(response);
@@ -109,5 +115,12 @@ export class EnterDataComponent {
       },
       error: (e) => console.error(e) // handle failure state
     });
+  }
+
+  combineAndClean(materialData: Record<string, any>, testData: Record<string, any>): Record<string, any> {
+    return Object.fromEntries(
+        Object.entries({ ...materialData, ...testData })
+            .filter(([_, value]) => value !== "")
+    );
   }
 }

@@ -18,8 +18,12 @@ client = pymongo.MongoClient('mongodb://localhost:27017') #change this to correc
 dbname = client['test-website']
 collection = dbname['test_materials']
 
+
 @api_view(['POST'])
 def login_view(request):
+    """
+    Logs the user in
+    """
     username = request.data.get('username')
     password = request.data.get('password')
     user = authenticate(request, username=username, password=password)
@@ -32,13 +36,18 @@ def login_view(request):
 
 @api_view(['POST'])
 def logout_view(request):
+    """
+    Logs the user out
+    """
     logout(request)
     request.session.flush()
     return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def register_view(request):
-    print(request.data)
+    """
+    Registers a new user and logs them in
+    """
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
@@ -46,11 +55,12 @@ def register_view(request):
         request.session['user_id'] = user.id  # Storing user ID in session
         return Response({'username': user.username}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
 @api_view(['GET'])
 def logged_in_view(request):
-    print(request.user)
+    """
+    Checks if the user is logged in
+    """
     if request.user.is_authenticated:
         return Response({'logged_in': True, 'username': request.user.username})
     else:
@@ -58,9 +68,12 @@ def logged_in_view(request):
 
 @api_view(['GET'])
 def get_tests(request):
+    """
+    Get specified data from database
+    """
     name = request.GET.get('name')
     if name:
-        tests = json_util.dumps(collection.find_one({"name": name}))
+        tests = json_util.dumps(collection.find_one({'name': name}))
     else:
         tests = json_util.dumps(list(collection.find({})))
     return JsonResponse(tests, safe=False)
@@ -68,6 +81,9 @@ def get_tests(request):
 @login_required
 @api_view(['PUT'])
 def put_tests(request):
+    """
+    Put material data in database
+    """
     metadata = {
         'user': request.user.username,
         'timestamp': time.time()
@@ -75,24 +91,34 @@ def put_tests(request):
     for test_type, test_list in request.data.items():
         if test_type != "other":
             for entry in test_list:
-                sampleIdentification = entry["sampleIdentification"]
-                materialType = entry["materialType"]
-                entry.pop("sampleIdentification")
-                entry.pop("materialType")
-                entry["metadata"] = metadata
-
-                print(collection.update_one(
-                    { '_id': sampleIdentification},
-                    { 
-                        '$set': {
-                            'materialType': materialType
+                entry['metadata'] = metadata
+                sampleIdentification = entry['sampleIdentification'] # handle errors if these fields don't exist
+                entry.pop('sampleIdentification')
+                if 'materialType' in entry:
+                    materialType = entry['materialType']
+                    entry.pop('materialType')
+                    print(collection.update_one(
+                        { '_id': sampleIdentification},
+                        { 
+                            '$set': {
+                                'materialType': materialType
+                            },
+                            '$push': {
+                                test_type: entry
+                            }
                         },
-                        '$push': {
-                            test_type: entry
-                        }
-                    },
-                    upsert=True
-                ))
+                        upsert=True
+                    ))
+                else:
+                    print(collection.update_one(
+                        { '_id': sampleIdentification},
+                        { 
+                            '$push': {
+                                test_type: entry
+                            }
+                        },
+                        upsert=True
+                    ))
         else:
             pass # handle other tests
 
@@ -101,6 +127,9 @@ def put_tests(request):
 @login_required
 @api_view(['DELETE'])
 def delete_test(request):
+    """
+    Delete a test
+    """
     test_data = JSONParser().parse(request)
     collection.delete_one(test_data)
     return JsonResponse({'message': 'Test was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)

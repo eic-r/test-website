@@ -1,4 +1,20 @@
 <main class="main">
+  <h2>Enter Data</h2>
+    <div class="material-form container2">
+      <input
+        type="text"
+        [(ngModel)]="materialData.sampleIdentification"
+        name="sampleIdentification"
+        placeholder="Sample Identification"
+        required
+      />
+      <input
+        type="text"
+        [(ngModel)]="materialData.materialType"
+        name="materialType"
+        placeholder="Material Type"
+      />
+    </div>
     <div class="test-selection">
       <label for="testTypeSelect">Choose a test type:</label>
       <select
@@ -15,18 +31,6 @@
     </div>
     <div *ngIf="selectedTest === 'tensile'" class="tensile-form container">
       <!-- Add all your tensile test inputs here -->
-      <input
-        type="text"
-        [(ngModel)]="tensileData.sampleIdentification"
-        name="sampleIdentification"
-        placeholder="Sample Identification"
-      />
-      <input
-        type="text"
-        [(ngModel)]="tensileData.materialType"
-        name="materialType"
-        placeholder="Material Type"
-      />
       <input
         type="text"
         [(ngModel)]="tensileData.testDate"
@@ -87,18 +91,6 @@
       <!-- Add all your shear test inputs here -->
       <input
         type="text"
-        [(ngModel)]="shearData.sampleIdentification"
-        name="sampleIdentification"
-        placeholder="Sample Identification"
-      />
-      <input
-        type="text"
-        [(ngModel)]="shearData.materialType"
-        name="materialType"
-        placeholder="Material Type"
-      />
-      <input
-        type="text"
         [(ngModel)]="shearData.testDate"
         name="testDate"
         placeholder="Test Date"
@@ -141,15 +133,45 @@
       <!-- Add all your thermal conductivity test inputs here -->
       <input
         type="text"
-        [(ngModel)]="thermalData.sampleIdentification"
-        name="sampleIdentification"
-        placeholder="Sample Identification"
+        [(ngModel)]="thermalData.testDate"
+        name="testDate"
+        placeholder="Test Date"
       />
       <input
         type="text"
-        [(ngModel)]="thermalData.materialType"
-        name="materialType"
-        placeholder="Material Type"
+        [(ngModel)]="thermalData.testTemperature"
+        name="testTemperature"
+        placeholder="Test Temperature"
+      />
+      <input
+        type="text"
+        [(ngModel)]="thermalData.thickness"
+        name="thickness"
+        placeholder="Thickness"
+      />
+      <input
+        type="text"
+        [(ngModel)]="thermalData.crossSectionalArea"
+        name="crossSectionalArea"
+        placeholder="Cross-Sectional Area"
+      />
+      <input
+        type="text"
+        [(ngModel)]="thermalData.thermalConductivity"
+        name="thermalConductivity"
+        placeholder="Thermal Conductivity"
+      />
+      <input
+        type="text"
+        [(ngModel)]="thermalData.temperatureGradient"
+        name="temperatureGradient"
+        placeholder="Temperature Gradient"
+      />
+      <input
+        type="text"
+        [(ngModel)]="thermalData.heatFlux"
+        name="heatFlux"
+        placeholder="Heat Flux"
       />
       <!-- Add the rest of your thermal test inputs... -->
     </div>
@@ -171,6 +193,7 @@
             <th>Elongation at Break</th>
             <th>Poisson's Ratio</th>
             <th>Failure Mode</th>
+            <th>Other</th>
           </tr>
         </thead>
         <tbody>
@@ -186,10 +209,76 @@
             <td>{{ entry.elongationAtBreak }}</td>
             <td>{{ entry.poissonRatio }}</td>
             <td>{{ entry.failureMode }}</td>
+            <td>{{ entry.other }}</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <!--this should appear only when data has been submitted-->
-    <button (click)="putTests()">Confirm</button>
+
+    <div *ngIf="shearEntries.length > 0" class="results-table">
+      <h2>Shear Test Entries</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Sample Identification</th>
+            <th>Material Type</th>
+            <th>Test Date</th>
+            <th>Test Temperature</th>
+            <th>Shear Modulus</th>
+            <th>Ultimate Shear Strength</th>
+            <th>Shear Strain at Failure</th>
+            <th>Failure Mode</th>
+            <th>Other</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of shearEntries">
+            <td>{{ entry.sampleIdentification }}</td>
+            <td>{{ entry.materialType }}</td>
+            <td>{{ entry.testDate }}</td>
+            <td>{{ entry.testTemperature }}</td>
+            <td>{{ entry.shearModulus }}</td>
+            <td>{{ entry.ultimateShearStrength }}</td>
+            <td>{{ entry.shearStrainAtFailure }}</td>
+            <td>{{ entry.failureMode }}</td>
+            <td>{{ entry.other }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="thermalEntries.length > 0" class="results-table">
+      <h2>Thermal Conductivity Test Entries</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Sample Identification</th>
+            <th>Material Type</th>
+            <th>Test Date</th>
+            <th>Test Temperature</th>
+            <th>Thickness</th>
+            <th>Cross-Sectional Area</th>
+            <th>Thermal Conductivity</th>
+            <th>Temperature Gradient</th>
+            <th>Heat Flux</th>
+            <th>Other</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of thermalEntries">
+            <td>{{ entry.sampleIdentification }}</td>
+            <td>{{ entry.materialType }}</td>
+            <td>{{ entry.testDate }}</td>
+            <td>{{ entry.testTemperature }}</td>
+            <td>{{ entry.thickness }}</td>
+            <td>{{ entry.crossSectionalArea }}</td>
+            <td>{{ entry.thermalConductivity }}</td>
+            <td>{{ entry.temperatureGradient }}</td>
+            <td>{{ entry.heatFlux }}</td>
+            <td>{{ entry.other }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <button *ngIf="tensileEntries.length > 0 || shearEntries.length > 0 || thermalEntries.length > 0" (click)="putTests()">Confirm</button>
   </main>

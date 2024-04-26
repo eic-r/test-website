@@ -24,6 +24,7 @@
     max-width: 100%;
     overflow-x: auto;
     margin-top: 2rem; /* Adjust this value to increase spacing from the form */
+    margin-bottom: 2rem;
   }
 
   /* Styles for the table to make it look better */
@@ -43,6 +44,15 @@
   /* If you want to add more space between the table and the form, adjust the margin here */
   .form {
     margin-bottom: 2rem; /* Space between the form and the table */
+  }
+
+  .container2 {
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
 
   .container {

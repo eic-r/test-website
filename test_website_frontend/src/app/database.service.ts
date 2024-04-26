@@ -15,10 +15,10 @@ export class DatabaseService {
 
   putTests(tensileEntries: any[], shearEntries: any[], thermalEntries: any[], otherEntries: any[]) {
     return this.http.put(`${this.apiUrl}/put_tests/`, {
-      "tensile" : tensileEntries,
-      "shear" : shearEntries,
-      "thermalConductivity" : thermalEntries,
-      "other" : otherEntries
+      'tensile' : tensileEntries,
+      'shear' : shearEntries,
+      'thermalConductivity' : thermalEntries,
+      'other' : otherEntries
     }, this.setHeaders()).pipe(
       catchError(this.handleError)
     );
